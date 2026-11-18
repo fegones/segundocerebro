@@ -1,0 +1,40 @@
+name: Publicar pre-release v1.3.0
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/publicar-v1.3.0.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publicar:
+    if: github.repository == 'fegones/segundocerebro' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Obtener version aprobada
+        uses: actions/checkout@v4
+
+      - name: Crear pre-release si todavia no existe
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if gh release view v1.3.0 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "v1.3.0 ya publicada; no se modifica."
+            exit 0
+          fi
+          gh release create v1.3.0 \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Segundo Cerebro v1.3.0 — Versión de evaluación" \
+            --notes-file docs/NOTAS_RELEASE_v1.3.0.md \
+            --prerelease
+          gh release view v1.3.0 --repo "$GITHUB_REPOSITORY"
