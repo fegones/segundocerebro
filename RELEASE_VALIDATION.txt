@@ -1,0 +1,36 @@
+Notebook Conexión v1.3.0 — Acta de validación local (2026-11-18)
+Titular declarado: Felipe Carlos González Espinoza
+Licencia: MIT
+
+CONTROLES COMPLETADOS (entorno de construcción, sin acceso a cuentas externas)
+- PYTHONPATH=src python -m pytest -q --disable-warnings --maxfail=1
+  Resultado: 115 pruebas aprobadas (todas); no se ejecutaron pruebas de integración real.
+- python -m compileall -q src tests
+  Resultado: aprobado.
+- PYTHONPATH=src python -m notebook_conexion.selftest
+  Resultado: diagnóstico local y servidor MCP stdio, correcto.
+- python -m pip wheel --no-build-isolation --no-deps --wheel-dir [directorio] .
+  Resultado: wheel notebook_conexion-1.3.0-py3-none-any.whl creado.
+  Nota: la compilación aislada no pudo descargar dependencias en este entorno sin Internet.
+- scripts/check_release.py: revisa estructura, nombre de archivos de secretos y hashes SHA-256.
+
+CONTROLES NO EJECUTADOS NI CERTIFICADOS
+- Windows 11 real con Python 3.11, 3.12 o 3.13 y entorno virgen.
+- Flujo de consentimiento OAuth, conexión a cuentas Google y APIs Notebook/Gemini reales.
+- Integración final con versiones específicas de Claude Code y Codex instaladas.
+- Auditoría dinámica de tráfico, pentesting, escaneo CVE de dependencias instaladas.
+- Inspección forense independiente y certificación de seguridad.
+- Ausencia de alucinaciones: únicamente hay abstención léxica, sin garantía semántica.
+
+LÍMITES DEL PROVEEDOR
+La API documentada de Google no expone chat completo/historial ni todos los artefactos de NotebookLM.
+El índice cifrado solo dispone del contenido importado manualmente o de texto que la API
+realmente devuelva en respuestas GetSource. No se simula contenido inaccesible.
+
+PRIVACIDAD Y ALCANCE
+El servidor MCP puede imponer selección de cuadernos autorizados. Este control no
+restringe otras herramientas independientes que el agente tenga habilitadas.
+El índice cifra contenido, pero los metadatos locales de cuadernos/fuentes no están cifrados.
+
+El manifiesto SHA256SUMS.txt verifica los archivos de esta entrega, no la
+seguridad de las dependencias ni la autenticidad del servicio remoto.

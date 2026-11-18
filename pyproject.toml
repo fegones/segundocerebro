@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=77,<90"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "notebook-conexion"
+version = "1.3.0"
+description = "Conector local para Gemini Notebook y agentes MCP, con OAuth individual y exportación segura"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{name = "Felipe Carlos González Espinoza"}]
+keywords = ["gemini-notebook", "mcp", "claude-code", "codex", "oauth", "windows"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
+  "Environment :: Console",
+]
+dependencies = [
+  "httpx>=0.27,<0.29",
+  "platformdirs>=4,<6",
+  "keyring>=25,<27",
+  "google-auth>=2.35,<3",
+  "google-auth-oauthlib>=1.2,<2",
+  "cryptography>=43,<49",
+  "pypdf>=5,<8",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "pip-audit>=2.7,<3", "ruff>=0.8,<1", "build>=1.2,<2"]
+
+[project.scripts]
+notebook-conexion = "notebook_conexion.cli:main"
+notebook-conexion-mcp = "notebook_conexion.mcp_server:main"
+notebook-conexion-gui = "notebook_conexion.desktop:main"
+notebook-conexion-agentes = "notebook_conexion.agent_install:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+notebook_conexion = ["skill/SKILL.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "B"]
