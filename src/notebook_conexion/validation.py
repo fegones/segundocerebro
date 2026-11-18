@@ -82,7 +82,7 @@ def public_url(value: str) -> str:
         ipaddress.ip_address(host.strip("[]"))
     except ValueError:
         if "." not in host:
-            raise SecurityError("Se requiere un dominio público con puntos.")
+            raise SecurityError("Se requiere un dominio público con puntos.") from None
     else:
         raise SecurityError("No se admiten direcciones IP literales.")
     return value

@@ -3,7 +3,7 @@ import json
 import pytest
 
 from notebook_conexion.cli import execute, parser
-from notebook_conexion.errors import ConfigurationError
+from notebook_conexion.errors import ConfigurationError, SecurityError
 from notebook_conexion.store import Profile, ProfileStore
 
 
@@ -37,7 +37,7 @@ def test_doctor_has_no_secret(tmp_path, monkeypatch, capsys):
 def test_policy_requires_ack(tmp_path):
     store = ProfileStore(tmp_path / "config")
     store.save(Profile("personal", "my-cloud-project", "/fake"))
-    with pytest.raises(Exception):
+    with pytest.raises(SecurityError):
         execute(parser().parse_args(["policy", "--writes", "on"]), store)
     execute(parser().parse_args(["policy", "--writes", "on", "--ack", "CONFIRMO-ESCRITURA"]), store)
     assert store.load("personal").allow_write

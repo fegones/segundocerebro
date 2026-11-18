@@ -75,7 +75,8 @@ def answer_with_gemini(store: BrainStore, bindings: tuple[Binding, ...], questio
     if generator is None:
         from .gemini import GeminiClient
         profile = ProfileStore().load(bindings[0].profile)
-        generator = lambda prompt: GeminiClient(profile).generate(prompt, model=model, response_json=True)
+        def generator(prompt: str) -> str:
+            return GeminiClient(profile).generate(prompt, model=model, response_json=True)
     pieces = []
     for e in evidence["evidencias"]:
         pieces.append(f"{e['cita']} [{e['perfil']} / {e['cuaderno']} / {e['fuente']}]\n{e['fragmento_literal']}")

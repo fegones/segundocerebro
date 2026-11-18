@@ -46,7 +46,8 @@ def _as_csv(records: list[dict]) -> bytes:
 def _as_markdown(records: list[dict], title: str) -> str:
     rows = ["# " + title, "", "| Nombre | ID | Estado |", "|---|---|---|"]
     for x in records:
-        esc = lambda v: str(v or "").replace("|", "\\|").replace("\r", " ").replace("\n", " ")
+        def esc(v: object) -> str:
+            return str(v or "").replace("|", "\\|").replace("\r", " ").replace("\n", " ")
         rows.append("| " + " | ".join([esc(x.get("displayName")), esc(x.get("name")), esc(x.get("state"))]) + " |")
     rows.append("")
     return "\n".join(rows)

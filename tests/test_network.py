@@ -14,7 +14,8 @@ NOTEBOOK = "notebooks/550e8400-e29b-41d4-a716-446655440000"
 def client(monkeypatch, *, writes=False, handler=None):
     monkeypatch.setattr("notebook_conexion.notebook.access_token", lambda *a, **k: "FAKE-SECRET")
     if handler is None:
-        handler = lambda request: httpx.Response(200, json={"notebooks": []})
+        def handler(request):
+            return httpx.Response(200, json={"notebooks": []})
     transport = JsonTransport(
         "https://notebook.googleapis.com/v1", transport=httpx.MockTransport(handler)
     )

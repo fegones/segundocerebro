@@ -256,7 +256,8 @@ def main() -> None:
                     window.after(0,lambda text=str(exc): messagebox.showerror("Segundo cerebro",text,parent=window))
                 except Exception:
                     window.after(0,lambda: messagebox.showerror("Segundo cerebro","Error inesperado; no se muestran datos sensibles.",parent=window))
-                else: window.after(0,lambda: show(result))
+                else:
+                    window.after(0, lambda: show(result))
             threading.Thread(target=job,daemon=True).start()
         def selected_one():
             bindings=scopes.active()

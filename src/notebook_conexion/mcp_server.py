@@ -117,18 +117,25 @@ def execute_tool(name: str, args: dict, settings: Settings) -> object:
     if name in PROTECTED_TOOLS and name != "estado_notebook_conexion":
         brain = SecondBrain()
         match name:
-            case "ver_segundo_cerebro": return brain.status()
-            case "listar_fuentes_protegidas": return brain.catalog()
-            case "listar_documentos_indexados": return brain.documents()
-            case "sincronizar_segundo_cerebro": return brain.sync(include_text=args.get("incluir_texto", False))
-            case "auditar_duplicados_fuentes": return brain.audit_sources(similarity=args.get("similitud", True))
-            case "auditar_duplicados_cuadernos": return brain.audit_notebooks()
+            case "ver_segundo_cerebro":
+                return brain.status()
+            case "listar_fuentes_protegidas":
+                return brain.catalog()
+            case "listar_documentos_indexados":
+                return brain.documents()
+            case "sincronizar_segundo_cerebro":
+                return brain.sync(include_text=args.get("incluir_texto", False))
+            case "auditar_duplicados_fuentes":
+                return brain.audit_sources(similarity=args.get("similitud", True))
+            case "auditar_duplicados_cuadernos":
+                return brain.audit_notebooks()
             case "comparar_fuentes_cuadernos":
                 return brain.compare_documents(Binding(args["perfil_a"], args["cuaderno_a"]), args["fuente_a"],
                                                Binding(args["perfil_b"], args["cuaderno_b"]), args["fuente_b"])
             case "comparar_versiones_fuente":
                 return brain.compare(Binding(args["perfil"], args["cuaderno"]), args["fuente"], args["version_anterior"], args["version_nueva"])
-            case "buscar_evidencia_segura": return brain.evidence(args["pregunta"])
+            case "buscar_evidencia_segura":
+                return brain.evidence(args["pregunta"])
             case "responder_segundo_cerebro":
                 return brain.answer(args["pregunta"], mode=args.get("modo", "extractivo"),
                                     allow_gemini=settings.allow_gemini, model=args.get("modelo", "gemini-3.8-flash"))
@@ -153,18 +160,30 @@ def execute_tool(name: str, args: dict, settings: Settings) -> object:
                 "nota": "No se comprueban tokens de Google en este diagnóstico local."}
     op = Operations(profile, agent_writes=settings.allow_writes, agent_gemini=settings.allow_gemini)
     match name:
-        case "listar_cuadernos": return {"cuadernos": op.list_notebooks()}
-        case "buscar_cuadernos": return {"cuadernos": op.find_notebooks(args["texto"])}
-        case "ver_cuaderno": return op.get_notebook(args["cuaderno"])
-        case "listar_fuentes": return {"fuentes": op.list_sources(args["cuaderno"])}
-        case "ver_fuente": return op.get_source(args["nombre"])
-        case "crear_cuaderno": return op.create_notebook(args["titulo"])
-        case "renombrar_cuaderno": return op.rename_notebook(args["cuaderno"], args["titulo"])
-        case "agregar_fuente_url": return op.add_url(args["cuaderno"], args["titulo"], args["url"])
-        case "agregar_fuente_texto": return op.add_text(args["cuaderno"], args["titulo"], args["texto"], args.get("markdown", False))
-        case "exportar_catalogo": return op.export_catalog(args["tipo"], args["archivo"], args["formato"], args.get("cuaderno", ""))
-        case "generar_texto_gemini": return op.generate_text(args["instruccion"], args.get("modelo", "gemini-3.8-flash"))
-        case "generar_archivo_gemini": return op.generate_file(args["instruccion"], args["archivo"], args["formato"], args.get("modelo", "gemini-3.8-flash"))
+        case "listar_cuadernos":
+            return {"cuadernos": op.list_notebooks()}
+        case "buscar_cuadernos":
+            return {"cuadernos": op.find_notebooks(args["texto"])}
+        case "ver_cuaderno":
+            return op.get_notebook(args["cuaderno"])
+        case "listar_fuentes":
+            return {"fuentes": op.list_sources(args["cuaderno"])}
+        case "ver_fuente":
+            return op.get_source(args["nombre"])
+        case "crear_cuaderno":
+            return op.create_notebook(args["titulo"])
+        case "renombrar_cuaderno":
+            return op.rename_notebook(args["cuaderno"], args["titulo"])
+        case "agregar_fuente_url":
+            return op.add_url(args["cuaderno"], args["titulo"], args["url"])
+        case "agregar_fuente_texto":
+            return op.add_text(args["cuaderno"], args["titulo"], args["texto"], args.get("markdown", False))
+        case "exportar_catalogo":
+            return op.export_catalog(args["tipo"], args["archivo"], args["formato"], args.get("cuaderno", ""))
+        case "generar_texto_gemini":
+            return op.generate_text(args["instruccion"], args.get("modelo", "gemini-3.8-flash"))
+        case "generar_archivo_gemini":
+            return op.generate_file(args["instruccion"], args["archivo"], args["formato"], args.get("modelo", "gemini-3.8-flash"))
     raise ValueError("No existe el controlador MCP.")
 
 
